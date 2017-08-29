@@ -39,10 +39,8 @@ var lexer = function*(s, src, rules, mode = "default") {
 		if (found == null) return "Something extremely weird happened.";
 		[row, col] = pos2d(s.substr(0, i));
 		newmode = yield token(rule.name, found[0], src, row, col, mode);
-		if (newmode !== undefined) {
-			mode = newmode;
-			adv = found[0].length;
-		}
+		mode = (newmode !== undefined) ? newmode : mode;
+		adv = found[0].length;
 	}
 }
 
