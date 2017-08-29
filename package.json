@@ -1,6 +1,6 @@
 {
   "name": "bluesocks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bluesocks is a lightweight lexer in Javascript",
   "main": "index.js",
   "scripts": {
