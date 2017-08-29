@@ -1,10 +1,10 @@
 {
   "name": "bluesocks",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "Bluesocks is a lightweight lexer in Javascript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified yet\" && exit 1"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
