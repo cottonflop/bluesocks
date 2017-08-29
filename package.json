@@ -1,0 +1,25 @@
+{
+  "name": "bluesocks",
+  "version": "0.1.0",
+  "description": "Bluesocks is a lightweight lexer in Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified yet\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cottonflop/bluesocks.git"
+  },
+  "keywords": [
+    "lexer"
+  ],
+  "author": {
+    "name": "Betsy Fox",
+    "email": "cottonflop@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cottonflop/bluesocks/issues"
+  },
+  "homepage": "https://github.com/cottonflop/bluesocks#readme"
+}
