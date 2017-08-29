@@ -48,5 +48,7 @@ var lexer = function*(s, src, rules, mode = "default") {
 
 
 module.exports = {
-	lexer: lexer
+	lexer: lexer,
+	rule: rule,
+	token: token
 }
