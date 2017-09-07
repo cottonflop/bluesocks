@@ -3,7 +3,7 @@ var { lexer, rule } = require('.');
 let rules = {
 	default: [
 		rule("PERIOD", /\./),
-		rule("WORD", /[^t\.]+/)
+		rule("WORD", /[^\.]+/)
 	],
 	othermode: [
 		rule("PERIOD", /\./),
