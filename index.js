@@ -1,4 +1,4 @@
-let token = function(type, data, src, row, col) {
+let token = function(type, data, src) {
 	return {
 		type: type,
 		data: data,
@@ -10,6 +10,8 @@ let token = function(type, data, src, row, col) {
 }
 
 let context = [];
+let pos=0, row=1, col=1;
+let src = "";
 
 let pos2d = function(s) {
 	lines = s.split(/(?=\n)/);
@@ -25,27 +27,24 @@ let rule = function(name, regex, context) {
 
 
 let change_context = function(s) {
-	if (!s) return true;
-	switch(s[0]) {
-		case "<": //pop
-			return context.pop();
-		default: //push
-			return context.push(s);
-	}
+	if (!s) return;
+	return (s[0] == "<") ? context.pop() : context.push(s)
 }
+
 
 let get_context = function() {
 	return context.length > 0 ? context.slice(-1)[0] : "default";
 }
 
 
-var lexer = function*(s, src, rules, mode = "default") {
+var lexer = function*(s, src, rules) {
+	pos = 0;
 	context = [];
 	if (Array.isArray(rules)) rules = { default: rules };
 	if (s === undefined) return "No string provided!";
 	if (src === undefined) return "No source provided!";
 	if (rules === undefined) rules = { default: [rule("CHARACTER", /./)] };
-	let pos=0, row=1, col=1, data="";
+	let data = "";
 	let new_context = undefined;
 
 	for (let i=0; i < s.length; i+=data.length) {
@@ -58,8 +57,7 @@ var lexer = function*(s, src, rules, mode = "default") {
 			change_context(rule.context);
 			data = rule.regex.exec(s.substr(i))[0];
 		}
-		yield token(rule.name, data, src, row, col, mode);
-		if (!rules.hasOwnProperty(mode)) throw `Undefined mode specified: "${mode}"`;
+		yield token(rule.name, data, src);
 	}
 }
 
