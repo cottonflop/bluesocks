@@ -15,14 +15,15 @@ lex = lexer("This is a test. This is a test. This is a test.", "test", rules);
 
 let token = lex.next();
 while(!token.done) {
+	console.log(token.value.src);
 	switch (token.value.type) {
 		case "WORD1":
 		case "PERIOD1":
-			console.log("We're in the default context");
+			console.log("We're in the default context", token.value.data);
 			break;
 		case "WORD2":
 		case "PERIOD2":
-			console.log("We're in the other context");
+			console.log("We're in the other context", token.value.data);
 			break;
 		}
 	token = lex.next();
