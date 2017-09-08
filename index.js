@@ -1,4 +1,4 @@
-let token = function(type, data, src) {
+let token = function(type, data) {
 	return {
 		type: type,
 		data: data,
@@ -11,7 +11,7 @@ let token = function(type, data, src) {
 
 let context = [];
 let pos=0, row=1, col=1;
-let src = "";
+let src = undefined;
 
 let pos2d = function(s) {
 	lines = s.split(/(?=\n)/);
@@ -37,7 +37,8 @@ let get_context = function() {
 }
 
 
-var lexer = function*(s, src, rules) {
+var lexer = function*(s, src_in, rules) {
+	src = src_in;
 	pos = 0;
 	context = [];
 	if (Array.isArray(rules)) rules = { default: rules };
