@@ -37,7 +37,6 @@ let change_context = function(s) {
 	}
 }
 
-
 let get_context = function() {
 	return context.length > 0 ? context.slice(-1)[0] : "default";
 }
@@ -50,6 +49,7 @@ var lexer = function*(s, src, rules, mode = "default") {
 	if (src === undefined) return "No source provided!";
 	if (rules === undefined) rules = { default: [rule("CHARACTER", /./)] };
 	let pos=0, row=1, col=1, data="";
+	let new_context = undefined;
 
 	for (let i=0; i < s.length; i+=data.length) {
 		[row, col] = pos2d(s.substr(0, i));
@@ -61,6 +61,7 @@ var lexer = function*(s, src, rules, mode = "default") {
 			change_context(rule.context);
 			data = rule.regex.exec(s.substr(i))[0];
 		}
+		yield token(rule.name, data, src, row, col, mode);
 		if (!rules.hasOwnProperty(mode)) throw `Undefined mode specified: "${mode}"`;
 	}
 }
