@@ -27,13 +27,10 @@ let rule = function(name, regex, context) {
 let change_context = function(s) {
 	if (!s) return true;
 	switch(s[0]) {
-		case ">": //push
-			return (context.push(s.substr(1)) == s.substr(1));
 		case "<": //pop
-			return (context.pop() == s.substr(1));
-		default: //no.
-			console.log(`Unknown context switch encountered: "${s}"`);
-			return false;
+			return context.pop();
+		default: //push
+			return context.push(s);
 	}
 }
 

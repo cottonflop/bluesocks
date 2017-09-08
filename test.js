@@ -2,11 +2,11 @@ var { lexer, rule } = require('.');
 
 let rules = {
 	default: [
-		rule("PERIOD1", /\./, ">othermode"),
+		rule("PERIOD1", /\./, "othermode"),
 		rule("WORD1", /[^\.]+/)
 	],
 	othermode: [
-		rule("PERIOD2", /\./, "<othermode"),
+		rule("PERIOD2", /\./, "<"),
 		rule("WORD2", /[^\.]+/)
 	]
 }
