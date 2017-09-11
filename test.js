@@ -15,7 +15,6 @@ lex = lexer("This is a test. This is a test. This is a test.", "test", rules);
 
 let token = lex.next();
 while(!token.done) {
-	console.log(token.value.src);
 	switch (token.value.type) {
 		case "WORD1":
 		case "PERIOD1":
