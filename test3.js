@@ -1,8 +1,4 @@
-# bluesocks
-Bluesocks is a lightweight lexer in Javascript
-
-```javascript
-let { lexer, rule } = require('.');
+let {	lexer, rule } = require('.');
 
 let rules = {
 	default: [
@@ -36,4 +32,3 @@ while(!token.done) {
 		}
 	token = lex.next();
 }
-```
