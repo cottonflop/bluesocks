@@ -2,7 +2,7 @@
 Bluesocks is a lightweight lexer in Javascript
 
 ```javascript
-let { lexer, rule } = require('.');
+let { lexer, rule } = require('bluesocks');
 
 let rules = {
 	default: [
