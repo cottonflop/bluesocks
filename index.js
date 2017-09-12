@@ -25,6 +25,8 @@ let rule = function(name, regex, context) {
 	return { name: name, regex: regex, context: context };
 }
 
+let default_rule = { name: "UNDEFINED", regex: /./ };
+let next_token = token(default_rule.name, "");
 
 let change_context = function(s) {
 	if (!s) return;
@@ -41,24 +43,20 @@ var lexer = function*(s, src_in, rules) {
 	src = src_in;
 	pos = 0;
 	context = [];
+	next_token = token(default_rule.name, "");
+
 	if (Array.isArray(rules)) rules = { default: rules };
+	rules = rules || { default: [rule("CHARACTER", /./)] };
+	
 	if (s === undefined) return "No string provided!";
 	if (src === undefined) return "No source provided!";
-	if (rules === undefined) rules = { default: [rule("CHARACTER", /./)] };
-	let data = "";
-	let new_context = undefined;
 
-	for (let i=0; i < s.length; i+=data.length) {
+	for (let i=0; i < s.length; i+=next_token.data.length) {
 		[row, col] = pos2d(s.substr(0, i));
-		let rule = rules[get_context()].find((x) => (s.substr(i).search(x.regex) == 0));
-		if (rule == undefined)  {
-			data = s.substr(i, 1);
-			rule = {name: "UNDEFINED"};
-		} else {
-			change_context(rule.context);
-			data = rule.regex.exec(s.substr(i))[0];
-		}
-		yield token(rule.name, data, src);
+		let rule = rules[get_context()].find((x) => (s.substr(i).search(x.regex) == 0)) || default_rule;
+		change_context(rule.context);
+		next_token = token(rule.name, rule.regex.exec(s.substr(i))[0]);
+		yield next_token;
 	}
 }
 
