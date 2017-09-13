@@ -16,32 +16,40 @@ let rules = {
 	],
 }
 
-let test_token = function(actual, expected) {
+let test_token = function(actual, expected, testname="") {
 	for (let key of Object.keys(expected)) {
 		// console.log(`Expected: "${expected[key].toString()}", Actual: "${actual.value[key].toString()}"`);
 		if (expected[key].toString() != actual.value[key].toString()) {
-			console.log(`Test # ${tests.length}: Expected: "${expected[key].toString()}", Actual: "${actual.value[key].toString()}"`);
-			return false;
+			return [false, `FAILED! Expected: "${expected[key].toString()}", Actual: "${actual.value[key].toString()}"`];
 		}
 	}
-	return true;
+	return [true, `PASS${testname ? " - " + testname : testname }`];
 }
 
-lex = lexer("This is a test. This is still a test, this is a test...", "test", rules);
+lex = lexer("This is default scope. This is othermode, This is otherothermode...", "test", rules);
 
 tests = [];
 
-tests.push(test_token(lex.next(), {data: "This is a test", context: ""}));
-tests.push(test_token(lex.next(), {data: ". ", context: "othermode"}));
-tests.push(test_token(lex.next(), {data: "This is still a test", context: "othermode"}));
-tests.push(test_token(lex.next(), {data: ", ", context: "othermode,otherothermode"}));
-tests.push(test_token(lex.next(), {data: "this is a test", context: "othermode,otherothermode"}));
-tests.push(test_token(lex.next(), {data: ".", context: "othermode"}));
-tests.push(test_token(lex.next(), {data: ".", context: ""}));
-tests.push(test_token(lex.next(), {data: ".", context: "othermode"}));
+tests.push(test_token(lex.next(), {data: "This is default scope", scope: "default"}, "Default scope"));
+tests.push(test_token(lex.next(), {data: ". ", scope: "default.othermode"}, "New scope push, 1 level"));
+tests.push(test_token(lex.next(), {data: "This is othermode", scope: "default.othermode"}, "Staying in scope"));
+tests.push(test_token(lex.next(), {data: ", ", scope: "default.othermode.otherothermode"}, "New scope push, 2 levels"));
+tests.push(test_token(lex.next(), {data: "This is otherothermode", scope: "default.othermode.otherothermode"}, "Scope pop, 1 level"));
+tests.push(test_token(lex.next(), {data: ".", scope: "default.othermode"}, "Scope pop, 1 level"));
+tests.push(test_token(lex.next(), {data: ".", scope: "default"}, "Scope pop, default scope"));
+tests.push(test_token(lex.next(), {data: ".", scope: "default.othermode"}, "Scope pop, 1 level"));
+
+
+
+
+tests.push(require('./test2'))
+
+// console.log(tests)
 
 for (let i in tests) {
-	console.log("Test #", i, tests[i] ? "PASS" : "FAIL")
+	[result, msg] = tests[i];
+	console.log(`Test #${i}: ${msg}`)
 }
 
-tests.reduce((a, b) => { return a && b}) ? process.exit(0) : process.exit(1)
+
+tests.reduce((a, b) => { return a && b[0]}) ? process.exit(0) : process.exit(1)
