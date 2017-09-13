@@ -5,11 +5,11 @@ let token = function(type, data) {
 		src: src,
 		row: row,
 		col: col,
-		context: context
+		scope: scope.join(".")
 	}
 }
 
-let context = [];
+let scope = [];
 let pos=0, row=1, col=1;
 let src = undefined;
 
@@ -21,30 +21,30 @@ let pos2d = function(s) {
 }
 
 
-let rule = function(name, regex, context) {
-	return { name: name, regex: regex, context: context };
+let rule = function(name, regex, scope) {
+	return { name: name, regex: regex, scope: scope };
 }
 
 let default_rule = { name: "UNDEFINED", regex: /./ };
 let next_token = token(default_rule.name, "");
 
-let change_context = function(s) {
+let change_scope = function(s) {
 	if (!s) return;
-	return (s[0] == "<") ? context.pop() : context.push(s)
+	return (s[0] == "<") ? scope.pop() : scope.push(s)
 }
 
 
-let get_context = function() {
-	return context.length > 0 ? context.slice(-1)[0] : "default";
+let get_scope = function() {
+	return scope.length > 0 ? scope.slice(-1)[0] : "default";
 }
 
 
 var lexer = function*(s, src_in, rules) {
 	src = src_in;
 	pos = 0;
-	context = [];
+	scope = [];
 	next_token = token(default_rule.name, "");
-
+	change_scope("default");
 	if (Array.isArray(rules)) rules = { default: rules };
 	rules = rules || { default: [rule("CHARACTER", /./)] };
 	
@@ -53,8 +53,8 @@ var lexer = function*(s, src_in, rules) {
 
 	for (let i=0; i < s.length; i+=next_token.data.length) {
 		[row, col] = pos2d(s.substr(0, i));
-		let rule = rules[get_context()].find((x) => (s.substr(i).search(x.regex) == 0)) || default_rule;
-		change_context(rule.context);
+		let rule = rules[get_scope()].find((x) => (s.substr(i).search(x.regex) == 0)) || default_rule;
+		change_scope(rule.scope);
 		next_token = token(rule.name, rule.regex.exec(s.substr(i))[0]);
 		yield next_token;
 	}
