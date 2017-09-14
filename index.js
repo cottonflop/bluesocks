@@ -63,7 +63,7 @@ var lexer = function*(s, src_in, rules) {
 		let rule = rules[get_scope()].find((x) => (s.substr(i).search(x.regex) == 0)) || default_rule;
 		change_scope(rule.scope);
 		next_token = token(rule.name, rule.regex.exec(s.substr(i))[0]);
-		yield copy(next_token);
+		yield next_token;
 	}
 }
 
