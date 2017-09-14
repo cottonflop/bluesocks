@@ -1,13 +1,19 @@
 let token = function(type, data) {
-	return {
+	return Object.freeze({
 		type: type,
 		data: data,
 		src: src,
 		row: row,
 		col: col,
 		scope: scope.join(".")
-	}
+	});
 }
+
+
+let copy = function(obj) {
+	return JSON.parse(JSON.stringify(obj))
+}
+
 
 let scope = [];
 let pos=0, row=1, col=1;
@@ -40,6 +46,7 @@ let get_scope = function() {
 
 
 var lexer = function*(s, src_in, rules) {
+	let adv = 1;
 	src = src_in;
 	pos = 0;
 	scope = [];
@@ -56,7 +63,7 @@ var lexer = function*(s, src_in, rules) {
 		let rule = rules[get_scope()].find((x) => (s.substr(i).search(x.regex) == 0)) || default_rule;
 		change_scope(rule.scope);
 		next_token = token(rule.name, rule.regex.exec(s.substr(i))[0]);
-		yield next_token;
+		yield copy(next_token);
 	}
 }
 
