@@ -1,6 +1,6 @@
 {
   "name": "bluesocks",
-  "version": "0.7.2",
+  "version": "0.7.5",
   "description": "Bluesocks is a lightweight lexer for Javascript",
   "main": "index.js",
   "scripts": {
@@ -22,4 +22,9 @@
     "url": "https://github.com/cottonflop/bluesocks/issues"
   },
   "homepage": "https://github.com/cottonflop/bluesocks#readme"
+<<<<<<< HEAD
 }
+
+=======
+}
+>>>>>>> 9eaf3f466d6a87f1057d4759b64e374077987d19
